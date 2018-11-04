@@ -11,6 +11,7 @@ Thumbs.db
 Library
 Temp
 Packages
+obj
 *.csproj
 *.pidb
 *.sln
