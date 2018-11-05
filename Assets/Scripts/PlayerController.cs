@@ -20,9 +20,11 @@ public class PlayerController : MonoBehaviour
     public GameObject shot;
     public Transform shotSpawn;
     public float fireRate;
+    public GameObject playerExplosion;
+    public GameController gameController;
 
     private float nextFire;
-
+    
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
@@ -37,7 +39,6 @@ public class PlayerController : MonoBehaviour
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
             audioSource.Play();
         }
-        
     }
 
     void FixedUpdate()
@@ -57,5 +58,12 @@ public class PlayerController : MonoBehaviour
             Mathf.Clamp(rigidBody.position.z, boundry.zMin, boundry.zMax)
             );
         rigidBody.rotation = Quaternion.Euler(0.0f, 0.0f, rigidBody.velocity.x * -tilt);
+    }
+
+    public void KillPlayer()
+    {
+        Instantiate(playerExplosion, transform.position, transform.rotation);
+        gameController.GameOver();
+        Destroy(gameObject);
     }
 }

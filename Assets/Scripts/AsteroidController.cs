@@ -5,15 +5,18 @@ using UnityEngine;
 public class AsteroidController : MonoBehaviour {
 
     public GameObject explosion;
-    public GameObject playerExplosion;
-
     public float tumble;
+    public int score;
+
     private Rigidbody rg;
+    private UIController uiController;
 
     void Start()
     {
         rg = GetComponent<Rigidbody>();
         rg.angularVelocity = Random.insideUnitSphere * tumble;
+        GameObject go = GameObject.FindWithTag("UIController");
+        uiController = go.GetComponent<UIController>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -23,12 +26,17 @@ public class AsteroidController : MonoBehaviour {
             return;
         }
         Instantiate(explosion, transform.position, transform.rotation);
+
         if (other.tag == "Player")
         {
-            Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+            PlayerController pc = other.gameObject.GetComponent<PlayerController>();
+            pc.KillPlayer();
+        }
+        else
+        {
+            uiController.AddScore(score);
         }
         
-        Destroy(other.gameObject);
         Destroy(gameObject);
     }
 }

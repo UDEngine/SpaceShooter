@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -11,10 +12,22 @@ public class GameController : MonoBehaviour {
     public float startWait;
     public float spawnWait;
     public float waveWait;
+    public UIController uIController;
+
+    private bool gameOver = false;
 
     private void Start()
     {
         StartCoroutine(SpawnWaves());
+    }
+
+    private void Update()
+    {
+        if (gameOver && Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene("main");
+        }
+
     }
 
     private IEnumerator SpawnWaves()
@@ -29,8 +42,18 @@ public class GameController : MonoBehaviour {
                 yield return new WaitForSeconds(spawnWait);
             }
             yield return new WaitForSeconds(waveWait);
+
+            if (gameOver)
+            {
+                break;
+            }
         }
 
+    }
 
+    public void GameOver()
+    {
+        gameOver = true;
+        uIController.ShowGameOverUI();
     }
 }
